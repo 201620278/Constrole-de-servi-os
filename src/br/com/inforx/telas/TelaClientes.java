@@ -33,7 +33,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     //Método adicionar clientes
     private void adicionarCli() {
         String sql = "insert into tbclientes(nomecli,fonecli,emailcli,cep, rua, numero, bairro,"
-            + "cidade, uf, referencia) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "cidade, uf, referencia) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtCliNome.getText());
@@ -122,10 +122,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 txtEndBairro.setText(rs.getString(4));
                 txtEndCidade.setText(rs.getString(5));
                 txtEndUf.setText(rs.getString(6));
-            }else{
-                JOptionPane.showMessageDialog(null,"Endreço não cadastrado !");
+            } else {
+                JOptionPane.showMessageDialog(null, "Endreço não cadastrado !");
             }
-            
+
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -135,20 +135,37 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     private void alterarcli() {
         int confirma = JOptionPane.showConfirmDialog(null, "Confima as alterações nos dados deste cliente?", "Atenção!", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
-            String sql = "UPDATE tbclientes SET nomecli=?,fonecli=?,emailcli=? WHERE nomecli=?";
-            try {
-                pst = conexao.prepareStatement(sql);
-                pst.setString(1, txtCliNome.getText());
-                pst.setString(2, txtCliFone.getText());
-                pst.setString(3, txtCliEmail.getText());
-                pst.setString(4, txtCliNome.getText());
+          String sql = "UPDATE  tbclientes SET nomecli=?, fonecli=?, emailcli=?, cep=?, rua=?, numero=?,"
+                  + " bairro=?, cidade=?, uf=?, referencia=? WHERE nomecli=?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtCliNome.getText());
+            pst.setString(2, txtCliFone.getText());
+            pst.setString(3, txtCliEmail.getText());
+            pst.setString(4, txtEndCep.getText());
+            pst.setString(5, txtEndRua.getText());
+            pst.setString(6, txtendNumero.getText());
+            pst.setString(7, txtEndBairro.getText());
+            pst.setString(8, txtEndCidade.getText());
+            pst.setString(9, txtEndUf.getText());
+            pst.setString(10, txtEndRef.getText());
+            pst.setString(11, txtCliNome.getText());
 
-                if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())) {
-                    JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatorios marcados com um (*)");
-                } else {
-                    int adicionado = pst.executeUpdate();
-                    if (adicionado > 0) {
-                        txtCliNome.setText(null);
+            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
+            // Validando os campos obrigatorios
+            if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())
+                    || (txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
+                    || (txtendNumero.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
+                    || (txtEndCidade.getText().isEmpty()) || (txtEndUf.getText().isEmpty())
+                    || (txtEndRef.getText().isEmpty())) {
+
+                JOptionPane.showMessageDialog(null,
+                        "Prencha todos os campos obrigatorios marcados com um *");
+            } else {
+                int adicionado = pst.executeUpdate();
+                if (adicionado > 0) {
+                    //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                    txtCliNome.setText(null);
                     txtCliFone.setText(null);
                     txtCliEmail.setText(null);
                     txtEndCep.setText(null);
@@ -511,7 +528,4 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtendNumero;
     // End of variables declaration//GEN-END:variables
 
-    private void limpar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
