@@ -36,63 +36,8 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         conexao = ModuloConexao.conector();// aqui chama o modulo de conexao.
     }
 
-    private void consultarEnd() {
-        String sql = "select * from tbenderecos where cep=?";
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtEndCep.getText());
-            rs = pst.executeQuery();
-            if (rs.next()) {
-                txtEndRua.setText(rs.getString(3));
-                txtEndBairro.setText(rs.getString(4));
-                txtEndCidade.setText(rs.getString(5));
-                txtEndUf.setText(rs.getString(6));
-            } else {
-                JOptionPane.showMessageDialog(null, "Endereço não cadastrado");
-                txtEndCep.setText(null);
-                txtEndRua.setText(null);
-                txtEndBairro.setText(null);
-                txtEndCidade.setText(null);
-                txtEndUf.setText(null);
-            }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    private void adicionarEnd() {
-       String sql = "insert into tbenderecos(cep, rua, bairro, cidade, uf) values(?, ?, ?, ?, ?)";
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtEndCep.getText());
-            pst.setString(2, txtEndRua.getText());
-            pst.setString(3, txtEndBairro.getText());
-            pst.setString(4, txtEndCidade.getText());
-            pst.setString(5, txtEndUf.getText());
-
-            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-            // Validando os campos obrigatorios
-            if ((txtEndRua.getText().isEmpty()) || (txtEndBairro.getText().isEmpty()) 
-                || (txtEndCidade.getText().isEmpty())|| (txtEndUf.getText().isEmpty())) {
-                JOptionPane.showMessageDialog(null, "Prencha todos os campos obrigatorios marcados com um *");
-            } else {
-                int adicionado = pst.executeUpdate();
-                if (adicionado > 0) {
-                    JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
-                    txtEndCep.setText(null);
-                    txtEndRua.setText(null);
-                    txtEndBairro.setText(null);
-                    txtEndCidade.setText(null);
-                    txtEndUf.setText(null);
-                }
-            }
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
-//====================================================================================//
+    //====================================================================================//
     //o metodo abaixo busca o cep automaticamente
-
     String rua;
     String bairro;
     String cidade;
@@ -137,18 +82,132 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
-        {
-
+    private void consultarEnd() {
+        String sql = "select * from tbenderecos where cep=?";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtEndCep.getText());
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                txtEndRua.setText(rs.getString(2));
+                txtEndBairro.setText(rs.getString(3));
+                txtEndCidade.setText(rs.getString(4));
+                txtEndUf.setText(rs.getString(5));
+                
+                btnEndCreate.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Endereço não cadastrado");
+               // txtEndCep.setText(null);
+                txtEndRua.setText(null);
+                txtEndBairro.setText(null);
+                txtEndCidade.setText(null);
+                txtEndUf.setText(null);
+                btnEndCreate.setEnabled(true);
+            }
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
         }
     }
 
+    private void adicionarEnd() {
+        String sql = "insert into tbenderecos(cep, rua, bairro, cidade, uf) values(?, ?, ?, ?, ?)";
+        try {
+            pst = conexao.prepareStatement(sql);
+            pst.setString(1, txtEndCep.getText());
+            pst.setString(2, txtEndRua.getText());
+            pst.setString(3, txtEndBairro.getText());
+            pst.setString(4, txtEndCidade.getText());
+            pst.setString(5, txtEndUf.getText());
+
+            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
+            // Validando os campos obrigatorios
+            if ((txtEndRua.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
+                    || (txtEndCidade.getText().isEmpty()) || (txtEndUf.getText().isEmpty())) {
+                JOptionPane.showMessageDialog(null, "Prencha todos os campos obrigatorios marcados com um *");
+            } else {
+                int adicionado = pst.executeUpdate();
+                if (adicionado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
+                    txtEndCep.setText(null);
+                    txtEndRua.setText(null);
+                    txtEndBairro.setText(null);
+                    txtEndCidade.setText(null);
+                    txtEndUf.setText(null);
+                }
+            }
+        } catch (HeadlessException | SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void alterarEnd() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Confima as alterações nos dados do endereço?", "Atenção!", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "UPDATE tbenderecos  SET rua=?, bairro=?, cidade=?, uf=? WHERE cep=?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtEndRua.getText());
+                pst.setString(2, txtEndBairro.getText());
+                pst.setString(3, txtEndCidade.getText());
+                pst.setString(4, txtEndUf.getText());
+                pst.setString(5, txtEndCep.getText());
+
+                //A linha abaixo atualiza a tabela de clientes com os dados do formulário
+                // Validando os campos obrigatorios
+                if ((txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
+                        || (txtEndBairro.getText().isEmpty())|| (txtEndCidade.getText().isEmpty()) 
+                        || (txtEndUf.getText().isEmpty())) {
+
+                    JOptionPane.showMessageDialog(null,
+                            "Prencha todos os campos obrigatorios marcados com um *");
+                } else {
+                    int adicionado = pst.executeUpdate();
+                    if (adicionado > 0) {
+                        //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                        txtEndCep.setText(null);
+                        txtEndRua.setText(null);
+                        txtEndBairro.setText(null);
+                        txtEndCidade.setText(null);
+                        txtEndUf.setText(null);
+                        btnEndCreate.setEnabled(true);
+                        
+                        JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                    }
+                }
+            } catch (HeadlessException | SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar" + e);
+            }
+        }
+    }
+    
+     private void removerEnd(){
+        int confirma=JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse endereço ?",
+                "Atenção",JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION){
+            String sql ="DELETE FROM tbenderecos WHERE cep=?";
+            try {
+                pst=conexao.prepareStatement(sql);
+                pst.setString(1, txtEndCep.getText());
+                int apagado =pst.executeUpdate();
+                if(apagado >0){
+                    JOptionPane.showMessageDialog(null,"Endereço removido com sucesso");
+                    txtEndCep.setText(null);
+                    txtEndRua.setText(null);
+                    txtEndBairro.setText(null);
+                    txtEndCidade.setText(null);
+                    txtEndUf.setText(null);
+                    
+                    btnEndCreate.setEnabled(true);
+                }
+            } catch (HeadlessException | SQLException e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }
 //===================================================================================//
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -213,11 +272,24 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
 
         btnEndUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/update.png"))); // NOI18N
         btnEndUpdate.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnEndUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEndUpdateActionPerformed(evt);
+            }
+        });
 
         btnEndDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/delete.png"))); // NOI18N
         btnEndDelete.setPreferredSize(new java.awt.Dimension(80, 80));
+        btnEndDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEndDeleteActionPerformed(evt);
+            }
+        });
 
-        btnBuscar.setText("Buscar");
+        btnBuscar.setBackground(new java.awt.Color(0, 0, 255));
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar na Web");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -243,7 +315,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                                             .addComponent(txtEndCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtEndBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtEndUf, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 106, Short.MAX_VALUE))))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -263,7 +335,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                                 .addComponent(txtEndCep, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(31, 31, 31)
                                 .addComponent(btnBuscar)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 371, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(btnEndRead, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -313,7 +385,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel1, jLabel3, jLabel5, jLabel6, jLabel7, jLabel8, txtEndBairro, txtEndCep, txtEndCidade, txtEndRua});
 
-        setBounds(0, 0, 860, 546);
+        setBounds(0, 0, 836, 546);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtEndCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndCidadeActionPerformed
@@ -338,6 +410,14 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
             buscarCep(txtEndCep.getText());
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEndUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndUpdateActionPerformed
+       alterarEnd();
+    }//GEN-LAST:event_btnEndUpdateActionPerformed
+
+    private void btnEndDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndDeleteActionPerformed
+        removerEnd();
+    }//GEN-LAST:event_btnEndDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

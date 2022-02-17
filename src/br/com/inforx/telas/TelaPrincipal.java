@@ -59,6 +59,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("X Sistema para controle de OS");
         setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        setLocationByPlatform(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -246,7 +247,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menCadUsuActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        //this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
+        this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
         Date datasistema = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         lblData.setText(formato.format(datasistema));

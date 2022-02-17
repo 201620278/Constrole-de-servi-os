@@ -80,7 +80,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
 
     //método para pesquisar clientes pelo nome com filtros %Like%
     private void pesquisar_clientes() {
-        String sql = "select * from tbclientes where nomecli like ?";
+        String sql = "select idcli as id, nomecli as nome, fonecli as fone, emailcli as email, cep as cep,"
+                + " rua as rua,"
+                + "numero as N°, bairro as bairro, cidade as cidade, uf as uf, referencia as refer"
+                + " from tbclientes where nomecli like ?";
         try {
             pst = conexao.prepareStatement(sql);
             //passando o conteúdo da caixa de pesquisa
@@ -106,6 +109,9 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         txtEndCidade.setText(tblClientes.getModel().getValueAt(setar, 8).toString());
         txtEndUf.setText(tblClientes.getModel().getValueAt(setar, 9).toString());
         txtEndRef.setText(tblClientes.getModel().getValueAt(setar, 10).toString());
+
+        // a linha abaixo bloqueia o botão adicionar após setar os dados dos cliente
+        btnAdicionar.setEnabled(false);
     }
 //---------------------------------------------------------------------------------------------// 
     //Método abaixo busca o endreço ddos clietes no banco
@@ -118,10 +124,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             pst.setString(1, txtEndCep.getText());
             rs = pst.executeQuery();
             if (rs.next()) {
-                txtEndRua.setText(rs.getString(3));
-                txtEndBairro.setText(rs.getString(4));
-                txtEndCidade.setText(rs.getString(5));
-                txtEndUf.setText(rs.getString(6));
+                txtEndRua.setText(rs.getString(2));
+                txtEndBairro.setText(rs.getString(3));
+                txtEndCidade.setText(rs.getString(4));
+                txtEndUf.setText(rs.getString(5));
             } else {
                 JOptionPane.showMessageDialog(null, "Endreço não cadastrado !");
             }
@@ -135,36 +141,67 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     private void alterarcli() {
         int confirma = JOptionPane.showConfirmDialog(null, "Confima as alterações nos dados deste cliente?", "Atenção!", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
-          String sql = "UPDATE  tbclientes SET nomecli=?, fonecli=?, emailcli=?, cep=?, rua=?, numero=?,"
-                  + " bairro=?, cidade=?, uf=?, referencia=? WHERE nomecli=?";
-        try {
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, txtCliNome.getText());
-            pst.setString(2, txtCliFone.getText());
-            pst.setString(3, txtCliEmail.getText());
-            pst.setString(4, txtEndCep.getText());
-            pst.setString(5, txtEndRua.getText());
-            pst.setString(6, txtendNumero.getText());
-            pst.setString(7, txtEndBairro.getText());
-            pst.setString(8, txtEndCidade.getText());
-            pst.setString(9, txtEndUf.getText());
-            pst.setString(10, txtEndRef.getText());
-            pst.setString(11, txtCliNome.getText());
+            String sql = "UPDATE  tbclientes SET nomecli=?, fonecli=?, emailcli=?, cep=?, rua=?, numero=?,"
+                    + " bairro=?, cidade=?, uf=?, referencia=? WHERE nomecli=?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtCliNome.getText());
+                pst.setString(2, txtCliFone.getText());
+                pst.setString(3, txtCliEmail.getText());
+                pst.setString(4, txtEndCep.getText());
+                pst.setString(5, txtEndRua.getText());
+                pst.setString(6, txtendNumero.getText());
+                pst.setString(7, txtEndBairro.getText());
+                pst.setString(8, txtEndCidade.getText());
+                pst.setString(9, txtEndUf.getText());
+                pst.setString(10, txtEndRef.getText());
+                pst.setString(11, txtCliNome.getText());
 
-            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-            // Validando os campos obrigatorios
-            if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())
-                    || (txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
-                    || (txtendNumero.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
-                    || (txtEndCidade.getText().isEmpty()) || (txtEndUf.getText().isEmpty())
-                    || (txtEndRef.getText().isEmpty())) {
+                //A linha abaixo atualiza a tabela de clientes com os dados do formulário
+                // Validando os campos obrigatorios
+                if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())
+                        || (txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
+                        || (txtendNumero.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
+                        || (txtEndCidade.getText().isEmpty()) || (txtEndUf.getText().isEmpty())
+                        || (txtEndRef.getText().isEmpty())) {
 
-                JOptionPane.showMessageDialog(null,
-                        "Prencha todos os campos obrigatorios marcados com um *");
-            } else {
-                int adicionado = pst.executeUpdate();
-                if (adicionado > 0) {
-                    //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                    JOptionPane.showMessageDialog(null,
+                            "Prencha todos os campos obrigatorios marcados com um *");
+                } else {
+                    int adicionado = pst.executeUpdate();
+                    if (adicionado > 0) {
+                        //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                        txtCliNome.setText(null);
+                        txtCliFone.setText(null);
+                        txtCliEmail.setText(null);
+                        txtEndCep.setText(null);
+                        txtEndRua.setText(null);
+                        txtendNumero.setText(null);
+                        txtEndBairro.setText(null);
+                        txtEndCidade.setText(null);
+                        txtEndUf.setText(null);
+                        txtEndRef.setText(null);
+                        JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                        btnAdicionar.setEnabled(true);
+                    }
+                }
+            } catch (HeadlessException | SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar" + e);
+            }
+        }
+    }
+
+    private void removercli() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse cliente ?",
+                "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "DELETE FROM tbclientes WHERE nomecli=?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                pst.setString(1, txtCliNome.getText());
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Cliente removido com sucesso");
                     txtCliNome.setText(null);
                     txtCliFone.setText(null);
                     txtCliEmail.setText(null);
@@ -175,11 +212,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                     txtEndCidade.setText(null);
                     txtEndUf.setText(null);
                     txtEndRef.setText(null);
-                        JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
-                    }
+                    btnAdicionar.setEnabled(true);
                 }
             } catch (HeadlessException | SQLException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao salvar" + e);
+                JOptionPane.showMessageDialog(null, e);
             }
         }
     }
@@ -241,6 +277,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        setResizable(true);
         setPreferredSize(new java.awt.Dimension(860, 546));
 
         jLabel1.setText("* Nome");
@@ -311,17 +348,24 @@ public class TelaClientes extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Ponto de Referência");
 
+        tblClientes = new javax.swing.JTable(){
+            public boolean isCelEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nome", "Fone", "Email", "Cep", "Rua", "N°.", "Bairro", "UF", "Cidade", "Referencia"
             }
         ));
+        tblClientes.setFocusable(false);
+        tblClientes.getTableHeader().setReorderingAllowed(false);
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblClientesMouseClicked(evt);
@@ -336,7 +380,6 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(txtCliPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -363,10 +406,11 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                                     .addComponent(txtCliFone, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtEndRua, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtEndBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtEndCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(39, 39, 39)
+                                            .addComponent(txtEndRua, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(txtEndBairro, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txtEndCidade, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel11)
@@ -384,7 +428,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnAlterar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAdicionar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRemover, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnRemover, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(39, 39, 39))
         );
         layout.setVerticalGroup(
@@ -476,7 +523,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-
+        removercli();
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void txtEndRuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEndRuaActionPerformed
