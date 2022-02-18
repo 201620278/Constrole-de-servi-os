@@ -247,7 +247,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menCadUsuActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
+        //this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
         Date datasistema = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         lblData.setText(formato.format(datasistema));
@@ -275,10 +275,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // Chamando a tela sobre
         TelaSobre sobre = new TelaSobre();
         sobre.setVisible(true);
+        desktop.add(sobre);
     }//GEN-LAST:event_menAjuSobActionPerformed
 
     private void menCadOsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menCadOsActionPerformed
-        // TODO add your handling code here:
+        //chamando a tela O.S
+        TelaOs os = new TelaOs();
+        os.setVisible(true);
+        desktop.add(os);
     }//GEN-LAST:event_menCadOsActionPerformed
 
     private void endUsuCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endUsuCadActionPerformed

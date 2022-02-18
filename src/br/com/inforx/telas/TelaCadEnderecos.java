@@ -21,6 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class TelaCadEnderecos extends javax.swing.JInternalFrame {
 
@@ -35,8 +36,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         initComponents();
         conexao = ModuloConexao.conector();// aqui chama o modulo de conexao.
     }
-
-    //====================================================================================//
+    
     //o metodo abaixo busca o cep automaticamente
     String rua;
     String bairro;
@@ -95,16 +95,11 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 txtEndBairro.setText(rs.getString(3));
                 txtEndCidade.setText(rs.getString(4));
                 txtEndUf.setText(rs.getString(5));
-                
+
                 btnEndCreate.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Endereço não cadastrado");
-               // txtEndCep.setText(null);
-                txtEndRua.setText(null);
-                txtEndBairro.setText(null);
-                txtEndCidade.setText(null);
-                txtEndUf.setText(null);
-                btnEndCreate.setEnabled(true);
+                limpar();
             }
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -130,11 +125,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
-                    txtEndCep.setText(null);
-                    txtEndRua.setText(null);
-                    txtEndBairro.setText(null);
-                    txtEndCidade.setText(null);
-                    txtEndUf.setText(null);
+                    limpar();
                 }
             }
         } catch (HeadlessException | SQLException e) {
@@ -157,7 +148,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 //A linha abaixo atualiza a tabela de clientes com os dados do formulário
                 // Validando os campos obrigatorios
                 if ((txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
-                        || (txtEndBairro.getText().isEmpty())|| (txtEndCidade.getText().isEmpty()) 
+                        || (txtEndBairro.getText().isEmpty()) || (txtEndCidade.getText().isEmpty())
                         || (txtEndUf.getText().isEmpty())) {
 
                     JOptionPane.showMessageDialog(null,
@@ -166,13 +157,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                     int adicionado = pst.executeUpdate();
                     if (adicionado > 0) {
                         //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
-                        txtEndCep.setText(null);
-                        txtEndRua.setText(null);
-                        txtEndBairro.setText(null);
-                        txtEndCidade.setText(null);
-                        txtEndUf.setText(null);
+                        limpar();
                         btnEndCreate.setEnabled(true);
-                        
+
                         JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
                     }
                 }
@@ -181,30 +168,34 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
             }
         }
     }
-    
-     private void removerEnd(){
-        int confirma=JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse endereço ?",
-                "Atenção",JOptionPane.YES_NO_OPTION);
-        if (confirma == JOptionPane.YES_OPTION){
-            String sql ="DELETE FROM tbenderecos WHERE cep=?";
+
+    private void removerEnd() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse endereço ?",
+                "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "DELETE FROM tbenderecos WHERE cep=?";
             try {
-                pst=conexao.prepareStatement(sql);
+                pst = conexao.prepareStatement(sql);
                 pst.setString(1, txtEndCep.getText());
-                int apagado =pst.executeUpdate();
-                if(apagado >0){
-                    JOptionPane.showMessageDialog(null,"Endereço removido com sucesso");
-                    txtEndCep.setText(null);
-                    txtEndRua.setText(null);
-                    txtEndBairro.setText(null);
-                    txtEndCidade.setText(null);
-                    txtEndUf.setText(null);
-                    
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Endereço removido com sucesso");
+                   limpar();
                     btnEndCreate.setEnabled(true);
                 }
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+    }
+
+    private void limpar() {
+        txtEndCep.setText(null);
+        txtEndRua.setText(null);
+        txtEndBairro.setText(null);
+        txtEndCidade.setText(null);
+        txtEndUf.setText(null);
+        btnEndCreate.setEnabled(true);
     }
 //===================================================================================//
 
@@ -412,7 +403,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEndUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndUpdateActionPerformed
-       alterarEnd();
+        alterarEnd();
     }//GEN-LAST:event_btnEndUpdateActionPerformed
 
     private void btnEndDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndDeleteActionPerformed

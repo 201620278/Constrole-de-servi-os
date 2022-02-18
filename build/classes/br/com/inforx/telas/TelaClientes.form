@@ -258,6 +258,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/bd/com/inforx/icones/create.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Novo Cliente"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[80, 80]"/>
         </Property>
@@ -271,6 +272,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/bd/com/inforx/icones/update.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Editar Cliente"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[80, 80]"/>
         </Property>
@@ -284,6 +286,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/bd/com/inforx/icones/delete.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Excluir Cliente"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[80, 80]"/>
         </Property>

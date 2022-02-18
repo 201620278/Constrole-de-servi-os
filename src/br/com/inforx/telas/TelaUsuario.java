@@ -47,10 +47,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Usuário não cadastrado");
                 // as linhas abaixo "lipam os campos"
-                txtUsuNome.setText(null);
-                txtUsuFone.setText(null);
-                txtUsuLogin.setText(null);
-                txtUsuSenha.setText(null);
+                limpar();
             }
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -78,11 +75,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso");
-                    txtUsuId.setText(null);
-                    txtUsuNome.setText(null);
-                    txtUsuFone.setText(null);
-                    txtUsuLogin.setText(null);
-                    txtUsuSenha.setText(null);
+                    limpar();
                 }
             }
         } catch (HeadlessException | SQLException e) {
@@ -91,7 +84,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     }
 
     private void alterarusu() {
-        String sql ="update tbusuarios set usuario=?,fone=?,login=?,senha=?,perfil=? where iduser=?";
+        String sql = "update tbusuarios set usuario=?,fone=?,login=?,senha=?,perfil=? where iduser=?";
         try {
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtUsuNome.getText());
@@ -108,39 +101,38 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Usuário alterado com sucesso");
-                    txtUsuId.setText(null);
-                    txtUsuNome.setText(null);
-                    txtUsuFone.setText(null);
-                    txtUsuLogin.setText(null);
-                    txtUsuSenha.setText(null);
+                    limpar();
                 }
-            }   
+            }
         } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    
-    private void remover(){
-        int confirma=JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse usuário ?",
-                "Atenção",JOptionPane.YES_NO_OPTION);
-        if (confirma == JOptionPane.YES_OPTION){
-            String sql ="delete from tbusuarios where iduser=?";
+
+    private void remover() {
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse usuário ?",
+                "Atenção", JOptionPane.YES_NO_OPTION);
+        if (confirma == JOptionPane.YES_OPTION) {
+            String sql = "delete from tbusuarios where iduser=?";
             try {
-                pst=conexao.prepareStatement(sql);
+                pst = conexao.prepareStatement(sql);
                 pst.setString(1, txtUsuId.getText());
-                int apagado =pst.executeUpdate();
-                if(apagado >0){
-                    JOptionPane.showMessageDialog(null,"Usuário removido com sucesso");
-                    txtUsuId.setText(null);
-                    txtUsuNome.setText(null);
-                    txtUsuFone.setText(null);
-                    txtUsuLogin.setText(null);
-                    txtUsuSenha.setText(null);
+                int apagado = pst.executeUpdate();
+                if (apagado > 0) {
+                    JOptionPane.showMessageDialog(null, "Usuário removido com sucesso");
+                   limpar();
                 }
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+    }
+    private void limpar() {
+        txtUsuId.setText(null);
+        txtUsuNome.setText(null);
+        txtUsuFone.setText(null);
+        txtUsuLogin.setText(null);
+        txtUsuSenha.setText(null);
     }
 
     /**

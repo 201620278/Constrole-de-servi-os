@@ -9,6 +9,7 @@ import java.sql.*;
 import br.com.inforx.dao.ModuloConexao;
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 //alinha abaixo importa recursos da biblioteca rs2xml.jar serve para uma busca mais avançada dos dados no banco
 import net.proteanit.sql.DbUtils;
 
@@ -61,16 +62,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado > 0) {
                     JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
-                    txtCliNome.setText(null);
-                    txtCliFone.setText(null);
-                    txtCliEmail.setText(null);
-                    txtEndCep.setText(null);
-                    txtEndRua.setText(null);
-                    txtendNumero.setText(null);
-                    txtEndBairro.setText(null);
-                    txtEndCidade.setText(null);
-                    txtEndUf.setText(null);
-                    txtEndRef.setText(null);
+                    limpar();
                 }
             }
         } catch (HeadlessException | SQLException e) {
@@ -170,18 +162,8 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 } else {
                     int adicionado = pst.executeUpdate();
                     if (adicionado > 0) {
-                        //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
-                        txtCliNome.setText(null);
-                        txtCliFone.setText(null);
-                        txtCliEmail.setText(null);
-                        txtEndCep.setText(null);
-                        txtEndRua.setText(null);
-                        txtendNumero.setText(null);
-                        txtEndBairro.setText(null);
-                        txtEndCidade.setText(null);
-                        txtEndUf.setText(null);
-                        txtEndRef.setText(null);
                         JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+                        limpar();
                         btnAdicionar.setEnabled(true);
                     }
                 }
@@ -202,22 +184,29 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 int apagado = pst.executeUpdate();
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Cliente removido com sucesso");
-                    txtCliNome.setText(null);
-                    txtCliFone.setText(null);
-                    txtCliEmail.setText(null);
-                    txtEndCep.setText(null);
-                    txtEndRua.setText(null);
-                    txtendNumero.setText(null);
-                    txtEndBairro.setText(null);
-                    txtEndCidade.setText(null);
-                    txtEndUf.setText(null);
-                    txtEndRef.setText(null);
+                    limpar();
                     btnAdicionar.setEnabled(true);
                 }
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+    }
+    //Método para limpara os formularios da tabela
+
+    private void limpar() {
+        txtCliNome.setText(null);
+        txtCliFone.setText(null);
+        txtCliEmail.setText(null);
+        txtEndCep.setText(null);
+        txtEndRua.setText(null);
+        txtendNumero.setText(null);
+        txtEndBairro.setText(null);
+        txtEndCidade.setText(null);
+        txtEndUf.setText(null);
+        txtEndRef.setText(null);
+        txtCliPesquisar.setText(null);
+        ((DefaultTableModel) tblClientes.getModel()).setRowCount(0);
     }
 
     /**
@@ -289,6 +278,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         jLabel4.setText("Cep");
 
         btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/create.png"))); // NOI18N
+        btnAdicionar.setToolTipText("Novo Cliente");
         btnAdicionar.setPreferredSize(new java.awt.Dimension(80, 80));
         btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -297,6 +287,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         });
 
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/update.png"))); // NOI18N
+        btnAlterar.setToolTipText("Editar Cliente");
         btnAlterar.setPreferredSize(new java.awt.Dimension(80, 80));
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,6 +296,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         });
 
         btnRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/delete.png"))); // NOI18N
+        btnRemover.setToolTipText("Excluir Cliente");
         btnRemover.setPreferredSize(new java.awt.Dimension(80, 80));
         btnRemover.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
