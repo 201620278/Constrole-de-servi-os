@@ -1,13 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2022 cicero Diego.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package br.com.inforx.telas;
 
 /**
+ * Tela de gestão de usuários
  *
- * @author cicer
+ * @author Cicero Diego
  */
 import java.sql.*;
 import br.com.inforx.dao.ModuloConexao;
@@ -23,13 +42,14 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     /**
      * Creates new form TelaUsuario
      */
-    //o trecho de codigo abaixo e um construtor é usado para inicializar o modulo de conexão.
     public TelaUsuario() {
         initComponents();
-        conexao = ModuloConexao.conector();// aqui chama o modulo de conexao.
+        conexao = ModuloConexao.conectar();// aqui chama o modulo de conexao.
     }
 
-    //Método consultar usuários
+    /**
+     * Método responsável pela pesquisa do usuário (Id do usuário)
+     */
     private void consultar() {
         String sql = "select * from tbusuarios where iduser=?";
 
@@ -46,7 +66,6 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 cboUsuPerfil.setSelectedItem(rs.getString(6));
             } else {
                 JOptionPane.showMessageDialog(null, "Usuário não cadastrado");
-                // as linhas abaixo "lipam os campos"
                 limpar();
             }
         } catch (HeadlessException | SQLException e) {
@@ -54,7 +73,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         }
     }
 
-    //Método adicionar usuários
+    /**
+     * Método responsável por adicionar um novo usuário
+     */
     private void adicionar() {
         String sql = "insert into tbusuarios(iduser,usuario,fone,login,senha,perfil) values(?, ?, ?, ?, ?, ?)";
         try {
@@ -83,6 +104,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método responsável pela edição dos dados do usuário incluindo a senha
+     */
     private void alterarusu() {
         String sql = "update tbusuarios set usuario=?,fone=?,login=?,senha=?,perfil=? where iduser=?";
         try {
@@ -109,6 +133,9 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método responsável pela remoção de um usuário
+     */
     private void remover() {
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse usuário ?",
                 "Atenção", JOptionPane.YES_NO_OPTION);
@@ -120,13 +147,17 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
                 int apagado = pst.executeUpdate();
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Usuário removido com sucesso");
-                   limpar();
+                    limpar();
                 }
             } catch (HeadlessException | SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
     }
+
+    /**
+     * Método responsável por limpar os campos e gerenciar os componentes
+     */
     private void limpar() {
         txtUsuId.setText(null);
         txtUsuNome.setText(null);

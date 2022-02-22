@@ -1,18 +1,38 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2022 cicero Diego.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package br.com.inforx.telas;
 
 import java.sql.*;
 import br.com.inforx.dao.ModuloConexao;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 
 /**
+ * Autenticação do usuário
  *
- * @author cicer
+ * @author Cicero Diego
  */
 public class TelaLogin extends javax.swing.JFrame {
 
@@ -20,24 +40,33 @@ public class TelaLogin extends javax.swing.JFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
 
-    public void logar() {
-        String sql = "select * from tbusuarios where login=? and senha=?";
+    /**
+     * Método responsável por exibir o ícone de status da conexão
+     */
+    public TelaLogin() {
+        initComponents();
+        conexao = ModuloConexao.conectar();
+        if (conexao != null) {
+            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/dbok.png")));
+        } else {
+            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/dberro.png")));
+        }
+    }
+
+    /**
+     * Método responsável pela autenticação e gestão de perfil do usuário
+     */
+    private void logar() {
+        String sql = "select * from tbusuarios where login = ? and senha = ?";
         try {
-            // as linha abaixo preparam a consulta ao banco em função do que foi
-            //digitado nas caixas de texto, o ? e substituído pelo conteúdo 
-            // das variáveis
+            conexao = ModuloConexao.conectar();
             pst = conexao.prepareStatement(sql);
             pst.setString(1, txtUsuario.getText());
             String captura = new String(txtSenha.getPassword());
             pst.setString(2, captura);
-            // a linha abaixo vai execultar a query
             rs = pst.executeQuery();
-            //se existir usuario e senha correspondente
             if (rs.next()) {
-                //a linha abaixo obtem o conteúdo do campo perfil da tabela usuarios
                 String perfil = rs.getString(6);
-                //System.out.println(perfil);
-                // a estrututa de decisão abaixo faz o tratamento do perfil do usuario
                 if (perfil.equals("admin")) {
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
@@ -45,37 +74,25 @@ public class TelaLogin extends javax.swing.JFrame {
                     TelaPrincipal.menCadUsu.setEnabled(true);
                     TelaPrincipal.endUsuCad.setEnabled(true);
                     TelaPrincipal.lblUsuario.setText(rs.getString(2));
-                    TelaPrincipal.lblUsuario.setForeground(Color.RED);
+                    TelaPrincipal.lblUsuario.setForeground(Color.red);
                     this.dispose();
-                    conexao.close();
-                }else{
+                } else {
                     TelaPrincipal principal = new TelaPrincipal();
                     principal.setVisible(true);
                     TelaPrincipal.lblUsuario.setText(rs.getString(2));
-                    TelaPrincipal.lblUsuario.setForeground(Color.blue);
                     this.dispose();
-                    conexao.close();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido(s)");
             }
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             JOptionPane.showMessageDialog(null, e);
-        }
-    }
-
-    /**
-     * Creates new form TelaLogin
-     */
-    public TelaLogin() {
-        initComponents();
-        conexao = ModuloConexao.conector();
-        // a linha abaixo serve de apoio para mostra o status de conexão
-        //System.out.println(conexao);
-        if (conexao != null) {
-            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/dbok.png")));
-        } else {
-            lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/dberro.png")));
+        } finally {
+            try {
+                conexao.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
     }
 

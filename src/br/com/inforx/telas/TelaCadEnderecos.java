@@ -1,13 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2022 cicero Diego.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package br.com.inforx.telas;
 
 /**
+ * Tela responsável pela gestão dos endereços
  *
- * @author cicer
+ * @author Cicero Diego
  */
 import br.com.inforx.dao.ModuloConexao;
 import java.awt.HeadlessException;
@@ -21,8 +40,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
+/**
+ * Tela para a gestão de endereços
+ *
+ * @author Cicero Diego
+ */
 public class TelaCadEnderecos extends javax.swing.JInternalFrame {
 
     Connection conexao = null;
@@ -34,16 +57,15 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
      */
     public TelaCadEnderecos() {
         initComponents();
-        conexao = ModuloConexao.conector();// aqui chama o modulo de conexao.
+        conexao = ModuloConexao.conectar();
     }
-    
-    //o metodo abaixo busca o cep automaticamente
     String rua;
     String bairro;
     String cidade;
     String uf;
 
     /**
+     * Método resposável por retornar o cep através de viacep
      *
      * @param cep
      */
@@ -61,13 +83,11 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
             br.lines().forEach(l -> jsonSb.append(l.trim()));
             json = jsonSb.toString();
 
-            // JOptionPane.showMessageDialog(null, json);
             json = json.replaceAll("[{},:]", "");
             json = json.replaceAll("\"", "\n");
             String array[] = new String[30];
             array = json.split("\n");
 
-            // JOptionPane.showMessageDialog(null, array);
             rua = array[7];
             bairro = array[15];
             cidade = array[19];
@@ -84,6 +104,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método Responsavel por consultar o endereço
+     */
     private void consultarEnd() {
         String sql = "select * from tbenderecos where cep=?";
         try {
@@ -106,6 +129,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método Responsavel por adicionar o endereço
+     */
     private void adicionarEnd() {
         String sql = "insert into tbenderecos(cep, rua, bairro, cidade, uf) values(?, ?, ?, ?, ?)";
         try {
@@ -116,8 +142,6 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
             pst.setString(4, txtEndCidade.getText());
             pst.setString(5, txtEndUf.getText());
 
-            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-            // Validando os campos obrigatorios
             if ((txtEndRua.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
                     || (txtEndCidade.getText().isEmpty()) || (txtEndUf.getText().isEmpty())) {
                 JOptionPane.showMessageDialog(null, "Prencha todos os campos obrigatorios marcados com um *");
@@ -133,6 +157,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método Responsavel por alterar o endereço
+     */
     private void alterarEnd() {
         int confirma = JOptionPane.showConfirmDialog(null, "Confima as alterações nos dados do endereço?", "Atenção!", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
@@ -145,8 +172,6 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 pst.setString(4, txtEndUf.getText());
                 pst.setString(5, txtEndCep.getText());
 
-                //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-                // Validando os campos obrigatorios
                 if ((txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
                         || (txtEndBairro.getText().isEmpty()) || (txtEndCidade.getText().isEmpty())
                         || (txtEndUf.getText().isEmpty())) {
@@ -156,7 +181,6 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 } else {
                     int adicionado = pst.executeUpdate();
                     if (adicionado > 0) {
-                        //JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
                         limpar();
                         btnEndCreate.setEnabled(true);
 
@@ -169,6 +193,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método Responsavel por remover o endereço
+     */
     private void removerEnd() {
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse endereço ?",
                 "Atenção", JOptionPane.YES_NO_OPTION);
@@ -180,7 +207,7 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
                 int apagado = pst.executeUpdate();
                 if (apagado > 0) {
                     JOptionPane.showMessageDialog(null, "Endereço removido com sucesso");
-                   limpar();
+                    limpar();
                     btnEndCreate.setEnabled(true);
                 }
             } catch (HeadlessException | SQLException e) {
@@ -189,6 +216,9 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método Responsavel por limpar os campos da tela de cadastro de endereços
+     */
     private void limpar() {
         txtEndCep.setText(null);
         txtEndRua.setText(null);
@@ -197,7 +227,6 @@ public class TelaCadEnderecos extends javax.swing.JInternalFrame {
         txtEndUf.setText(null);
         btnEndCreate.setEnabled(true);
     }
-//===================================================================================//
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

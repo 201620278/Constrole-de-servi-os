@@ -1,7 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2022 cicero Diego.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package br.com.inforx.telas;
 
@@ -10,12 +28,12 @@ import br.com.inforx.dao.ModuloConexao;
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-//alinha abaixo importa recursos da biblioteca rs2xml.jar serve para uma busca mais avançada dos dados no banco
 import net.proteanit.sql.DbUtils;
 
 /**
+ * Tela de gestão de clientes
  *
- * @author cicer
+ * @author Cicero Diego
  */
 public class TelaClientes extends javax.swing.JInternalFrame {
 
@@ -28,10 +46,12 @@ public class TelaClientes extends javax.swing.JInternalFrame {
      */
     public TelaClientes() {
         initComponents();
-        conexao = ModuloConexao.conector();
+        conexao = ModuloConexao.conectar();
     }
 
-    //Método adicionar clientes
+    /**
+     * Método responsável por adicionar novos clientes
+     */
     private void adicionarCli() {
         String sql = "insert into tbclientes(nomecli,fonecli,emailcli,cep, rua, numero, bairro,"
                 + "cidade, uf, referencia) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -48,8 +68,6 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             pst.setString(9, txtEndUf.getText());
             pst.setString(10, txtEndRef.getText());
 
-            //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-            // Validando os campos obrigatorios
             if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())
                     || (txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
                     || (txtendNumero.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
@@ -70,7 +88,9 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         }
     }
 
-    //método para pesquisar clientes pelo nome com filtros %Like%
+    /**
+     * Método responsável pela pesquisa de clientes pelo nome com filtro
+     */
     private void pesquisar_clientes() {
         String sql = "select idcli as id, nomecli as nome, fonecli as fone, emailcli as email, cep as cep,"
                 + " rua as rua,"
@@ -78,17 +98,17 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 + " from tbclientes where nomecli like ?";
         try {
             pst = conexao.prepareStatement(sql);
-            //passando o conteúdo da caixa de pesquisa
             pst.setString(1, txtCliPesquisar.getText() + "%");
             rs = pst.executeQuery();
-            // a linha abaixo usa os recursos da tabela rs2xml para preencher a tabela
             tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-    //método para preencher os campos do formulario com os dados selecionados da tabela
 
+    /**
+     * Método usado para setar os campos de texto com o conteúdo da tabela
+     */
     public void setar_campos() {
         int setar = tblClientes.getSelectedRow();
         txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
@@ -101,12 +121,12 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         txtEndCidade.setText(tblClientes.getModel().getValueAt(setar, 8).toString());
         txtEndUf.setText(tblClientes.getModel().getValueAt(setar, 9).toString());
         txtEndRef.setText(tblClientes.getModel().getValueAt(setar, 10).toString());
-
-        // a linha abaixo bloqueia o botão adicionar após setar os dados dos cliente
         btnAdicionar.setEnabled(false);
     }
-//---------------------------------------------------------------------------------------------// 
-    //Método abaixo busca o endreço ddos clietes no banco
+
+    /**
+     * Método responsável por fazer a consulta dos clientes no banco de dados
+     */
 
     private void consultarend() {
         String sql = "select * from tbenderecos where cep=?";
@@ -128,8 +148,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
-//--------------------------------------------------------------------------------------------------//   
 
+    /**
+     * Método responsável pela edição dos dados do cliente
+     */
     private void alterarcli() {
         int confirma = JOptionPane.showConfirmDialog(null, "Confima as alterações nos dados deste cliente?", "Atenção!", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
@@ -149,8 +171,6 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 pst.setString(10, txtEndRef.getText());
                 pst.setString(11, txtCliNome.getText());
 
-                //A linha abaixo atualiza a tabela de clientes com os dados do formulário
-                // Validando os campos obrigatorios
                 if ((txtCliNome.getText().isEmpty()) || (txtCliFone.getText().isEmpty())
                         || (txtEndCep.getText().isEmpty()) || (txtEndRua.getText().isEmpty())
                         || (txtendNumero.getText().isEmpty()) || (txtEndBairro.getText().isEmpty())
@@ -173,6 +193,9 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Método responsável por excluir um cliente
+     */
     private void removercli() {
         int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir esse cliente ?",
                 "Atenção", JOptionPane.YES_NO_OPTION);
@@ -192,7 +215,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
             }
         }
     }
-    //Método para limpara os formularios da tabela
+
+    /**
+     * Método responsável por limpar os campos e gerenciar os componentes
+     */
 
     private void limpar() {
         txtCliNome.setText(null);
