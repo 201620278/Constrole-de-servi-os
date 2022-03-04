@@ -73,6 +73,7 @@ public class TelaLogin extends javax.swing.JFrame {
                     TelaPrincipal.menRel.setEnabled(true);
                     TelaPrincipal.menCadUsu.setEnabled(true);
                     TelaPrincipal.endUsuCad.setEnabled(true);
+                    TelaPrincipal.CadColaborador.setEnabled(true);
                     TelaPrincipal.lblUsuario.setText(rs.getString(2));
                     TelaPrincipal.lblUsuario.setForeground(Color.red);
                     this.dispose();

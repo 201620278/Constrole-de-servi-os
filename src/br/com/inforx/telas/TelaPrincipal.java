@@ -74,6 +74,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * Método responsável pela emissão do relatório de serviços com
      * JasperReports
      */
+    /**
     private void relatorioServicos() {
         int confirma = JOptionPane.showConfirmDialog(null, "Confirma a emissao deste relatório ?", "Atenção", JOptionPane.YES_NO_OPTION);
         if (confirma == JOptionPane.YES_OPTION) {
@@ -85,7 +86,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         }
     }
-
+**/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,19 +97,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         desktop = new javax.swing.JDesktopPane();
-        jLabel1 = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
-        lblData = new javax.swing.JLabel();
-        lblHora = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        lblData = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        lblHora = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         Menu = new javax.swing.JMenuBar();
         menCad = new javax.swing.JMenu();
         menCadCli = new javax.swing.JMenuItem();
         menCadOs = new javax.swing.JMenuItem();
         menCadUsu = new javax.swing.JMenuItem();
         endUsuCad = new javax.swing.JMenuItem();
+        CadColaborador = new javax.swing.JMenuItem();
         menRel = new javax.swing.JMenu();
         menRelCli = new javax.swing.JMenuItem();
         MenRelSer = new javax.swing.JMenuItem();
@@ -127,46 +130,84 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        desktop.setMaximumSize(new java.awt.Dimension(836, 522));
-        desktop.setPreferredSize(new java.awt.Dimension(836, 522));
+        desktop.setMaximumSize(new java.awt.Dimension(992, 690));
+        desktop.setPreferredSize(new java.awt.Dimension(992, 690));
 
         javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 893, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 546, Short.MAX_VALUE)
+            .addGap(0, 690, Short.MAX_VALUE)
         );
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/x.png"))); // NOI18N
-
-        lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
-        lblUsuario.setText("Usuário");
-
-        lblData.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblData.setForeground(java.awt.Color.blue);
-        lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblData.setText("Data");
-
-        lblHora.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lblHora.setForeground(java.awt.Color.blue);
-        lblHora.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHora.setText("Hora");
+        jPanel1.setBackground(java.awt.Color.orange);
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Usuário:");
 
+        lblUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblUsuario.setText("Usuário");
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("Data:");
+
+        lblData.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblData.setForeground(java.awt.Color.blue);
+        lblData.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblData.setText("Data");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Hora:");
 
+        lblHora.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lblHora.setForeground(java.awt.Color.blue);
+        lblHora.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHora.setText("Hora");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblHora)
+                    .addComponent(lblData)
+                    .addComponent(lblUsuario))
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(lblUsuario))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lblData))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(lblHora))
+                .addGap(22, 22, 22))
+        );
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bd/com/inforx/icones/Infor-xDeveloper Logo.png"))); // NOI18N
+
         Menu.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        Menu.setName(""); // NOI18N
+        Menu.setName("tela principal"); // NOI18N
 
         menCad.setText("Cadastro");
 
@@ -207,6 +248,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
         menCad.add(endUsuCad);
+
+        CadColaborador.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        CadColaborador.setText("Colaboradores");
+        CadColaborador.setEnabled(false);
+        CadColaborador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CadColaboradorActionPerformed(evt);
+            }
+        });
+        menCad.add(CadColaborador);
 
         Menu.add(menCad);
 
@@ -266,51 +317,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(desktop, javax.swing.GroupLayout.DEFAULT_SIZE, 893, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(desktop, javax.swing.GroupLayout.DEFAULT_SIZE, 949, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                                    .addComponent(lblHora))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblData)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblUsuario)))
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap())))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel1)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(lblUsuario))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(lblData))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(lblHora))
-                .addGap(144, 144, 144)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74)
                 .addComponent(jLabel1)
-                .addGap(56, 80, Short.MAX_VALUE))
-            .addComponent(desktop, javax.swing.GroupLayout.DEFAULT_SIZE, 546, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(desktop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        setSize(new java.awt.Dimension(1104, 610));
+        setSize(new java.awt.Dimension(1196, 639));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -322,7 +352,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menCadUsuActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        //this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
+       // this.setExtendedState(MAXIMIZED_BOTH);// maximiza a tela automaticamente
         Date datasistema = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         lblData.setText(formato.format(datasistema));
@@ -340,7 +370,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     private void menOpcSaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menOpcSaiActionPerformed
-        // Exibe uma caixa de diálogo
         int sair = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja nos deixar?", "Atenção", JOptionPane.YES_NO_OPTION);
         if (sair == JOptionPane.YES_OPTION) {
             System.exit(0);
@@ -348,21 +377,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menOpcSaiActionPerformed
 
     private void menAjuSobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menAjuSobActionPerformed
-        // Chamando a tela sobre
         TelaSobre sobre = new TelaSobre();
         sobre.setVisible(true);
         desktop.add(sobre);
     }//GEN-LAST:event_menAjuSobActionPerformed
 
     private void menCadOsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menCadOsActionPerformed
-        //chamando a tela O.S
         TelaOs os = new TelaOs();
         os.setVisible(true);
         desktop.add(os);
     }//GEN-LAST:event_menCadOsActionPerformed
 
     private void endUsuCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endUsuCadActionPerformed
-        TelaCadEnderecos enderecos = new TelaCadEnderecos();
+        TelaEnderecos enderecos = new TelaEnderecos();
         enderecos.setVisible(true);
         desktop.add(enderecos);
     }//GEN-LAST:event_endUsuCadActionPerformed
@@ -378,9 +405,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menRelCliActionPerformed
 
     private void MenRelSerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenRelSerActionPerformed
-        relatorioServicos();
+        //relatorioServicos();
+        TelaRelServicos relatorio  = new TelaRelServicos();
+        relatorio.setVisible(true);
+        desktop.add(relatorio);
 
     }//GEN-LAST:event_MenRelSerActionPerformed
+
+    private void CadColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadColaboradorActionPerformed
+        TelaColaborador colaborador = new TelaColaborador();
+        colaborador.setVisible(true);
+        desktop.add(colaborador);
+    }//GEN-LAST:event_CadColaboradorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -418,6 +454,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JMenuItem CadColaborador;
     private javax.swing.JMenuItem MenRelSer;
     private javax.swing.JMenuBar Menu;
     private javax.swing.JDesktopPane desktop;
@@ -426,6 +463,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblData;
     private javax.swing.JLabel lblHora;
     public static javax.swing.JLabel lblUsuario;
